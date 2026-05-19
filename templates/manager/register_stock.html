@@ -1,0 +1,182 @@
+{% extends 'manager/base_manager.html' %}
+
+{% block content %}
+
+<div style="display:grid;
+grid-template-columns:2fr 1fr;
+gap:20px;">
+
+    <div class="card">
+
+        <h2 style="margin-bottom:25px;">
+            Register Stock
+        </h2>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            {{ formset.management_form }}
+
+            <table style="width:100%;
+            border-collapse:collapse;">
+
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Cost</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+
+                <tbody id="stock-items">
+
+                    {% for form in formset %}
+
+                    <tr class="stock-form">
+
+                        <td>
+                            {{ form.product }}
+                        </td>
+
+                        <td>
+                            {{ form.quantity }}
+                        </td>
+
+                        <td>
+                            {{ form.unit_cost }}
+                        </td>
+
+                        <td>
+                            {{ form.DELETE }}
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            <button type="button"
+            id="add-row"
+            style="
+            margin-top:20px;
+            padding:10px 18px;
+            border:none;
+            border-radius:10px;
+            background:#1ABC9C;
+            color:white;
+            cursor:pointer;
+            ">
+                + Add Product
+            </button>
+
+            <br><br>
+
+            <button type="submit"
+            style="
+            padding:12px 20px;
+            border:none;
+            border-radius:10px;
+            background:#0B1F3A;
+            color:white;
+            cursor:pointer;
+            ">
+                Save Stock
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="card">
+
+        <h3>Stock Summary</h3>
+
+        <hr style="margin:15px 0;">
+
+        <p>Total Items:
+        <strong id="total-items">0</strong>
+        </p>
+
+        <br>
+
+        <p>Total Quantity:
+        <strong id="total-quantity">0</strong>
+        </p>
+
+        <br>
+
+        <p>Grand Total:
+        <strong id="grand-total">
+            UGX 0
+        </strong>
+        </p>
+
+    </div>
+
+</div>
+
+<script>
+
+    const addRowBtn =
+    document.getElementById('add-row');
+
+    const totalForms =
+    document.getElementById(
+    'id_stockentryitem-TOTAL_FORMS'
+    );
+
+    const tableBody =
+    document.getElementById('stock-items');
+
+    addRowBtn.addEventListener('click', () => {
+
+        const currentForms =
+        document.querySelectorAll('.stock-form');
+
+        const formCount =
+        currentForms.length;
+
+        const newForm =
+        currentForms[0].cloneNode(true);
+
+        const inputs =
+        newForm.querySelectorAll('input, select');
+
+        inputs.forEach(input => {
+
+            input.value = '';
+
+            const name =
+            input.name.replace(
+            /-0-/g,
+            `-${formCount}-`
+            );
+
+            const id =
+            input.id.replace(
+            /-0-/g,
+            `-${formCount}-`
+            );
+
+            input.name = name;
+            input.id = id;
+
+        });
+
+        tableBody.appendChild(newForm);
+
+        totalForms.value =
+        formCount + 1;
+
+    });
+
+</script>
+
+{% endblock %}

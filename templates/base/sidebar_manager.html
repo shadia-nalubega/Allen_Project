@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <aside class="sidebar">
 
     <div class="logo-section">
@@ -38,5 +38,19 @@
         </a>
 
     </nav>
+
+    <div class="user-profile">
+    <div class="avatar">{{ request.user.username|slice:":2"|upper }}</div>
+
+    <div class="user-info">
+      <span class="name"> {{ request.user.username }} </span>
+
+      <span class="role"> Stock Manager </span>
+    </div>
+
+    <a href="{% url 'logout' %}" class="logout-link" >
+      <i class="ph ph-sign-out logout-icon"></i>
+    </a>
+  </div>
 
 </aside>

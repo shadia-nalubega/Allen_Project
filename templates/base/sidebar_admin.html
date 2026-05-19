@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <aside class="sidebar">
 
     <div class="logo-section">
@@ -23,8 +23,8 @@
         </a>
 
         <a href="" class="nav-item">
-            <i class="ph ph-file-text"></i>
-            Reports
+            <i class="ph ph-debt-card"></i>
+            Deposit Scheme
         </a>
 
         <a href="" class="nav-item">
@@ -32,6 +32,25 @@
             Supplier Credit
         </a>
 
+        <a href="" class="nav-item">
+            <i class="ph ph-file-text"></i>
+            Reports
+        </a>
+
     </nav>
+
+    <div class="user-profile">
+    <div class="avatar">{{ request.user.username|slice:":2"|upper }}</div>
+
+    <div class="user-info">
+      <span class="name"> {{ request.user.username }} </span>
+
+      <span class="role"> Admin </span>
+    </div>
+
+    <a href="{% url 'logout' %}" class="logout-link" >
+      <i class="ph ph-sign-out logout-icon"></i>
+    </a>
+  </div>
 
 </aside>

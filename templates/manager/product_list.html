@@ -1,0 +1,90 @@
+{% extends 'base/base.html' %} 
+{% load static %} 
+
+{% block title %}Products{% endblock %} 
+
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <h1>Product Inventory</h1>
+    <p>Manage all hardware products and stock levels.</p>
+  </div>
+
+  <a href="#" class="primary-btn"> + Add Product </a>
+</div>
+
+<div class="table-card">
+  <div class="table-top">
+    <input type="text" placeholder="Search products..." class="search-input" />
+  </div>
+
+  <table class="custom-table">
+    <thead>
+      <tr>
+        <th>SKU</th>
+        <th>Product</th>
+        <th>Category</th>
+        <th>Unit</th>
+        <th>Quantity</th>
+        <th>Cost Price</th>
+        <th>Normal Price</th>
+        <th>Retail Price</th>
+        <th>Wholesale Price</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for product in products %}
+
+      <tr>
+        <td>{{ product.sku }}</td>
+
+        <td>
+          <strong>{{ product.product_name }}</strong>
+        </td>
+
+        <td>{{ product.category.category_name }}</td>
+
+        <td>{{ product.unit }}</td>
+
+        <td>{{ product.quantity }}</td>
+
+        <td>UGX {{ product.unit_cost }}</td>
+        <td>UGX {{ product.normal_price }}</td>
+        <td>UGX {{ product.retail_price }}</td>
+        <td>UGX {{ product.wholesale_price }}</td>
+
+        <td>
+          {% if product.quantity <= product.reorder_level %}
+
+          <span class="badge danger"> Low Stock </span>
+
+          {% else %}
+
+          <span class="badge success"> In Stock </span>
+
+          {% endif %}
+        </td>
+        <td>
+          <a href="{% url 'edit_product' product.id %}"> Edit </a>
+
+          |
+
+          <a href="{% url 'delete_product' product.id %}"> Delete </a>
+        </td>
+      </tr>
+
+      {% empty %}
+
+      <tr>
+        <td colspan="8">No products available.</td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

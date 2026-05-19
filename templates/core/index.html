@@ -39,11 +39,19 @@
             Just clear, simple, and reliable business management.
           </p>
           <div class="actions">
-            <button class="btn-primary">Start Recording Sales</button>
+            <a href="{% url 'login' %}" class="btn-link">
+            <button class="btn-primary">
+              Start Recording Sales
+            </button>
+            </a>
+            <a href="{% url 'login' %}" class="btn-link">
             <button class="btn-secondary">Check Your Stock</button>
+            </a>
+            <a href="{% url 'login' %}" class="btn-link">
             <button class="btn-outline">
               See How Your Business Is Performing
             </button>
+            </a>
           </div>
         </div>
       </div>

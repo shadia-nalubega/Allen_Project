@@ -1,5 +1,6 @@
 from django.db import models
- 
+from  decimal import Decimal
+from django.utils.timezone import now
 # Create your models here.
 class Category(models.Model):
     category_name = models.CharField(max_length=100, unique=True)
@@ -37,6 +38,23 @@ class Product(models.Model):
     reorder_level = models.PositiveIntegerField(default=10)
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def calculate_prices(self):
+        self.normal_price = (
+        self.unit_cost +
+        (self.unit_cost * self.normal_percentage / Decimal('100'))
+    )
+        self.retail_price = (
+        self.unit_cost +
+        (self.unit_cost * self.retail_percentage / Decimal('100'))
+    )
+        self.wholesale_price = (
+        self.unit_cost +
+        (self.unit_cost * self.wholesale_percentage / Decimal('100'))
+    )
+    def save(self, *args, **kwargs):
+        self.calculate_prices()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.product_name    
@@ -103,7 +121,7 @@ class Supplier(models.Model):
         decimal_places=2,
         default=0
     )
-
+    is_credit_supplier = models.BooleanField(default=False)
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -148,7 +166,18 @@ class StockEntry(models.Model):
         Supplier,
         on_delete=models.CASCADE
     )
-    
+    added_by = models.ForeignKey(
+        'auth.User',
+        on_delete=models.SET_NULL,
+        null=True
+    )
+    invoice_number = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    stock_date = models.DateField(default=now)
+
     supplied_on_credit = models.BooleanField(default=False)
 
     total_cost = models.DecimalField(
@@ -157,23 +186,25 @@ class StockEntry(models.Model):
         default=0
     )
     payment_method = models.CharField(
-    max_length=20,
-    choices=PAYMENT_METHODS,
-    blank=True,
-    null=True
-    )
-    transaction_reference = models.CharField(
-    max_length=100,
-    blank=True,
-    null=True
-    )
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    added_by = models.ForeignKey(
-        'auth.User',
-        on_delete=models.SET_NULL,
+        max_length=20,
+        choices=PAYMENT_METHODS,
+        blank=True,
         null=True
     )
+    transaction_reference = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    notes = models.TextField(
+        blank=True,
+        null=True
+    )
+    
+
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    
 
     def __str__(self):
         return f"Stock Entry #{self.id}"

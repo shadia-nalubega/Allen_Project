@@ -1,13 +1,13 @@
 body {
-  height: 90vh;
+  height: 100vh;
   background: linear-gradient(235deg, #0b1f3a, #1abc9c);
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.container {
+/* .container {
   height: 50vh;
-}
+} */
 h2 {
   color: #1abc9c;
 }
@@ -23,6 +23,7 @@ h2 {
   border-radius: 18px;
   text-align: start;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-top: 50px !important;
 }
 input {
   border: 1px solid #ccc;

@@ -80,6 +80,9 @@ body {
   background: #1abc9c;
   transform: translateY(-2px);
 }
+.btn-link {
+  text-decoration: none;
+}
 .btn-outline {
   background: transparent;
   color: #1abc9c;
